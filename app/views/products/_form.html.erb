@@ -1,0 +1,38 @@
+<%= form_with(model: product) do |form| %>
+  <% if product.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+        <% product.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <% typed_values = product.initialize_typed_values.sort_by { |v| v.field.sort_order || 0 } %>
+  <% if typed_values.any? %>
+    <fieldset style="margin-top: 1.5em; padding: 1em; border: 1px solid #ccc;">
+      <legend><strong>Custom Fields</strong></legend>
+      <%= form.fields_for :typed_values, typed_values do |tf| %>
+        <%= tf.hidden_field :field_id %>
+        <%= render_typed_value_input(form: tf, typed_value: tf.object) %>
+      <% end %>
+    </fieldset>
+  <% else %>
+    <p style="margin-top: 1em;">
+      <em>No custom fields defined yet.</em>
+      <%= link_to "Define fields for Product →", typed_fields_path %>
+    </p>
+  <% end %>
+
+  <div style="margin-top: 1em;">
+    <%= form.submit %>
+  </div>
+<% end %>

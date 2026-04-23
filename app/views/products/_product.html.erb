@@ -1,0 +1,18 @@
+<div id="<%= dom_id product %>">
+  <div>
+    <strong>Name:</strong>
+    <%= product.name %>
+  </div>
+
+  <% hash = product.typed_fields_hash %>
+  <% if hash.any? %>
+    <div style="margin-top: 0.5em;">
+      <strong>Custom Fields:</strong>
+      <ul style="margin: 0.25em 0; padding-left: 1.5em;">
+        <% hash.each do |name, value| %>
+          <li><%= name.humanize %>: <%= value.is_a?(Array) ? value.join(", ") : value %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
